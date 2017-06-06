@@ -23,10 +23,10 @@ namespace ComputerVisionDemo
             string SubscriptionKey = "";
             string APIRoot = "https://westeurope.api.cognitive.microsoft.com/vision/v1.0";
 
-            VisionServiceClient VisionServiceClient = new VisionServiceClient(SubscriptionKey, APIRoot);
+            VisionServiceClient visionServiceClient = new VisionServiceClient(SubscriptionKey, APIRoot);
 
-            VisualFeature[] visualFeatures = new VisualFeature[] { VisualFeature.Adult, VisualFeature.Categories, VisualFeature.Color, VisualFeature.Description, VisualFeature.Faces, VisualFeature.ImageType, VisualFeature.Tags };
-            AnalysisResult analysisResult = await VisionServiceClient.AnalyzeImageAsync(imageUrl, visualFeatures);
+            VisualFeature[] visualFeatures = {VisualFeature.Description};
+            AnalysisResult analysisResult = await visionServiceClient.AnalyzeImageAsync(imageUrl, visualFeatures);
             return analysisResult;
         }
 
@@ -41,15 +41,20 @@ namespace ComputerVisionDemo
             image.Source = b;
         }
 
-        private async void RecognizeAsyncClick(object sender, RoutedEventArgs e)
+        private async void RecognizeAsyncButtonClick(object sender, RoutedEventArgs e)
         {
-            runAsyncRecog.IsEnabled = false;
+            RunAsyncRecogButton.IsEnabled = false;
 
-            var slowTask = await AnalyzeUrl(@"https://pp.userapi.com/c836231/v836231496/2cc31/7zjQanEbu7Q.jpg");
+            var slowTask = await AnalyzeUrl(@"");
 
-            ImagesRichTextBox.AppendText(slowTask.Faces.ToString());
+            ImagesRichTextBox.AppendText(slowTask.Description.Captions[0].Text);
 
-            runAsyncRecog.IsEnabled = true;
+            RunAsyncRecogButton.IsEnabled = true;
+        }
+
+        private void ChooseFolderButton_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

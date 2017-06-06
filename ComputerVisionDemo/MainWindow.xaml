@@ -5,45 +5,104 @@
         x:Class="ComputerVisionDemo.MainWindow"
         mc:Ignorable="d"
         Title="MainWindow"
+        MinHeight="500"
+        MinWidth="800"
         Height="720"
         Width="1280">
-    <Grid>
+       <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="2*" />
             <ColumnDefinition Width="1*" />
         </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="9*" />
-            <RowDefinition Height="1*" />
-        </Grid.RowDefinitions>
+        
         <Image Grid.Column="0"
+               Grid.RowSpan="3"
                HorizontalAlignment="Stretch"
                Margin="20"
                Loaded="Image_Loaded" />
-        <RichTextBox  Grid.Column="1"
-                      HorizontalAlignment="Stretch"
-                      VerticalAlignment="Stretch"
-                      x:Name="ImagesRichTextBox"
-                      Margin="20" />
-        <StackPanel Orientation="Horizontal" 
-                    Grid.Column="1"
-                    Grid.Row="1">
-            <ComboBox Height="25"
-                      Margin="20"
-                      HorizontalAlignment="Left"
-                      Width="280">
-            </ComboBox>
-            <Button Content="Select folder..."
-                    HorizontalAlignment="Right"
-                    Height="25"/>
-        </StackPanel>
-        <Button Content="Recognize"
-                HorizontalAlignment="Right"
-                Height="25"
-                Margin="20"
-                Grid.Column="0"
-                Name="runAsyncRecog"
-                Click="RecognizeAsyncClick"
-                Grid.Row="1"/>
+       
+        <Grid Grid.Row="0"
+              Grid.Column="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="9*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="200" />
+            </Grid.RowDefinitions>
+            <RichTextBox  Grid.Row="0"
+                          IsReadOnly="True"
+                          HorizontalAlignment="Stretch"
+                          VerticalAlignment="Stretch"
+                          x:Name="ImagesRichTextBox"
+                          Margin="20,0,20,20" />
+            <Grid Row="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="1*" />
+                    <RowDefinition Height="1*" />
+                </Grid.RowDefinitions>
+                <Grid Grid.Column="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="9*" />
+                        <ColumnDefinition Width="50" />
+                    </Grid.ColumnDefinitions>
+                    <StackPanel>
+                        <Label Content="_Choose from disk:"
+                               Margin="20,0,20,0"
+                               Target="{Binding ElementName=ChoosenImageComboBox}" />
+                        <ComboBox Height="25"
+                                  Name="ChoosenImageComboBox"
+                                  Margin="20,0,10,0"
+                                  HorizontalAlignment="Stretch" />
+                    </StackPanel>
+                    <StackPanel Grid.Column="1">
+                        <Label Content="" />
+                        <Button Content="..."
+                                Name="ChooseFolderButton"
+                                Margin="0, 0, 20, 0"
+                                HorizontalAlignment="Stretch"
+                                Height="25"
+                                Click="ChooseFolderButton_Click" />
+                    </StackPanel>
+                </Grid>
+                <StackPanel Grid.Row="1">
+                    <Label Content="_Recognize image from URL:"
+                           Margin="20,0,20,0"
+                           Target="{Binding ElementName=ImageUrlTextBox}" />
+                    <TextBox Height="25"
+                             IsReadOnly="True"
+                             Name="ImageUrlTextBox"
+                             Margin="20,0,20,0"
+                             HorizontalAlignment="Stretch" />
+                </StackPanel>
+                <Grid Grid.Row="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="7*" />
+                        <ColumnDefinition Width="110" />
+                    </Grid.ColumnDefinitions>
+                    <StackPanel>
+                        <Label Content="_Set visual features:"
+                               Margin="20,0,20,0"
+                               HorizontalAlignment="Stretch"
+                               Target="{Binding ElementName=RunAsyncRecogButton}" />
+                        <ComboBox Margin="20,0,10,0"
+                                  Height="25"
+                                  HorizontalAlignment="Stretch"/>
+                    </StackPanel>
+                    <StackPanel Grid.Column="1">
+                        <Label Content=""
+                               />
+                        <Button Content="Recognize"
+                                Height="25"
+                                Width="90"
+                                HorizontalAlignment="Right"
+                                Margin="0,0,20,0"
+                                Name="RunAsyncRecogButton"
+                                Click="RecognizeAsyncButtonClick" />
+                    </StackPanel>
+                </Grid>
+            </Grid>
+        </Grid>
     </Grid>
 </Window>
