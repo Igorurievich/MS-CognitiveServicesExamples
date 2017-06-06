@@ -19,7 +19,7 @@
                Grid.RowSpan="3"
                HorizontalAlignment="Stretch"
                Margin="20"
-               Loaded="Image_Loaded" />
+               Name="ImageContainer"/>
        
         <Grid Grid.Row="0"
               Grid.Column="1">
@@ -71,10 +71,10 @@
                            Margin="20,0,20,0"
                            Target="{Binding ElementName=ImageUrlTextBox}" />
                     <TextBox Height="25"
-                             IsReadOnly="True"
                              Name="ImageUrlTextBox"
                              Margin="20,0,20,0"
-                             HorizontalAlignment="Stretch" />
+                             HorizontalAlignment="Stretch"
+                             TextChanged="ImageUrlTextBox_TextChanged" />
                 </StackPanel>
                 <Grid Grid.Row="2">
                     <Grid.ColumnDefinitions>
@@ -88,6 +88,7 @@
                                Target="{Binding ElementName=RunAsyncRecogButton}" />
                         <ComboBox Margin="20,0,10,0"
                                   Height="25"
+                                  Name="VisualFeautures"
                                   HorizontalAlignment="Stretch"/>
                     </StackPanel>
                     <StackPanel Grid.Column="1">

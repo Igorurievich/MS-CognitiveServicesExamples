@@ -1,10 +1,10 @@
 ﻿using Microsoft.ProjectOxford.Vision.Contract;
 using Microsoft.ProjectOxford.Vision;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media.Imaging;
 using System;
 using System.Windows.Controls;
+using VisionApiDemo.Core;
 
 namespace ComputerVisionDemo
 {
@@ -13,41 +13,22 @@ namespace ComputerVisionDemo
     /// </summary>
     public partial class MainWindow : Window
     {
+        //https://pp.userapi.com/c836231/v836231496/2ad35/BXrrAm_FzLM.jpg
+        private readonly Recognizer _recognizer;
+
         public MainWindow()
         {
             InitializeComponent();
-        }
 
-        private async Task<AnalysisResult> AnalyzeUrl(string imageUrl)
-        {
-            string SubscriptionKey = "";
-            string APIRoot = "https://westeurope.api.cognitive.microsoft.com/vision/v1.0";
-
-            VisionServiceClient visionServiceClient = new VisionServiceClient(SubscriptionKey, APIRoot);
-
-            VisualFeature[] visualFeatures = {VisualFeature.Description};
-            AnalysisResult analysisResult = await visionServiceClient.AnalyzeImageAsync(imageUrl, visualFeatures);
-            return analysisResult;
-        }
-
-        private void Image_Loaded(object sender, RoutedEventArgs e)
-        {
-            BitmapImage b = new BitmapImage();
-            b.BeginInit();
-            b.UriSource = new Uri(@"");
-            b.EndInit();
-
-            var image = sender as Image;            
-            image.Source = b;
+            VisualFeautures.ItemsSource = Enum.GetValues(typeof(VisualFeature));
         }
 
         private async void RecognizeAsyncButtonClick(object sender, RoutedEventArgs e)
-        {
+        { 
             RunAsyncRecogButton.IsEnabled = false;
 
-            var slowTask = await AnalyzeUrl(@"");
-
-            ImagesRichTextBox.AppendText(slowTask.Description.Captions[0].Text);
+            AnalysisResult analysisResult = await _recognizer.AnalyzeUrl(ImageUrlTextBox.Text, new[] { (VisualFeature)VisualFeautures.SelectedItem});
+            ImagesRichTextBox.AppendText(AnalisysHelper.GetInfo(analysisResult, (VisualFeature)VisualFeautures.SelectedItem));
 
             RunAsyncRecogButton.IsEnabled = true;
         }
@@ -55,6 +36,16 @@ namespace ComputerVisionDemo
         private void ChooseFolderButton_Click(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private void ImageUrlTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            BitmapImage b = new BitmapImage();
+            b.BeginInit();
+            b.UriSource = new Uri(ImageUrlTextBox.Text, UriKind.Absolute);
+            b.EndInit();
+           
+            ImageContainer.Source = b;
         }
     }
 }
