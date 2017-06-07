@@ -35,7 +35,6 @@ namespace ComputerVisionDemo
 
         private void ChooseFolderButton_Click(object sender, RoutedEventArgs e)
         {
-
         }
 
         private void ImageUrlTextBox_TextChanged(object sender, TextChangedEventArgs e)

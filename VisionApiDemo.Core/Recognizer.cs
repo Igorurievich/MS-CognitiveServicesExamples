@@ -18,7 +18,6 @@ namespace VisionApiDemo.Core
             {
                 return;
             }
-
             SubscriptionKey = subscriptionKey;
             ApiRoot = apiRoot;
             _visionServiceClient = new VisionServiceClient(SubscriptionKey, ApiRoot);
