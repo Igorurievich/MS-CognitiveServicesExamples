@@ -3,11 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26430.12
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VisionAPI Demo", "VisionAPI Demo\VisionAPI Demo.csproj", "{DD21BDE2-B522-472D-A441-08CFDA898D3B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VisionAPIImageRecogDemo", "VisionAPI Demo\VisionAPIImageRecogDemo.csproj", "{DD21BDE2-B522-472D-A441-08CFDA898D3B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ComputerVisionDemo", "ComputerVisionDemo\ComputerVisionDemo.csproj", "{246D9C55-070A-4AE4-B0D4-5A8D5D251D95}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VisionApiDemo.Core", "VisionApiDemo.Core\VisionApiDemo.Core.csproj", "{91F7291F-428C-4B58-9BC8-97B208509CCE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VisionApiStreamRecogDemo", "VisionApiStreamDemo\VisionApiStreamRecogDemo.csproj", "{22EA7154-E38D-4E33-8582-726C7FFE180B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{91F7291F-428C-4B58-9BC8-97B208509CCE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{91F7291F-428C-4B58-9BC8-97B208509CCE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{91F7291F-428C-4B58-9BC8-97B208509CCE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{22EA7154-E38D-4E33-8582-726C7FFE180B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{22EA7154-E38D-4E33-8582-726C7FFE180B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{22EA7154-E38D-4E33-8582-726C7FFE180B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{22EA7154-E38D-4E33-8582-726C7FFE180B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

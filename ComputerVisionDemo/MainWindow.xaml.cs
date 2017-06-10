@@ -19,7 +19,7 @@ namespace ComputerVisionDemo
         public MainWindow()
         {
             InitializeComponent();
-
+            
             VisualFeautures.ItemsSource = Enum.GetValues(typeof(VisualFeature));
         }
 
@@ -29,12 +29,7 @@ namespace ComputerVisionDemo
 
             AnalysisResult analysisResult = await _recognizer.AnalyzeUrl(ImageUrlTextBox.Text, new[] { (VisualFeature)VisualFeautures.SelectedItem});
             ImagesRichTextBox.AppendText(AnalisysHelper.GetInfo(analysisResult, (VisualFeature)VisualFeautures.SelectedItem));
-
             RunAsyncRecogButton.IsEnabled = true;
-        }
-
-        private void ChooseFolderButton_Click(object sender, RoutedEventArgs e)
-        {
         }
 
         private void ImageUrlTextBox_TextChanged(object sender, TextChangedEventArgs e)
@@ -43,7 +38,6 @@ namespace ComputerVisionDemo
             b.BeginInit();
             b.UriSource = new Uri(ImageUrlTextBox.Text, UriKind.Absolute);
             b.EndInit();
-           
             ImageContainer.Source = b;
         }
     }
