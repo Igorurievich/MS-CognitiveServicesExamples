@@ -1,4 +1,7 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.ProjectOxford.Vision;
 using Microsoft.ProjectOxford.Vision.Contract;
 
@@ -11,7 +14,6 @@ namespace VisionApiDemo.Core
 
         private readonly VisionServiceClient _visionServiceClient;
 
-
         public Recognizer(string subscriptionKey, string apiRoot)
         {
             if (string.IsNullOrEmpty(subscriptionKey) || string.IsNullOrEmpty(apiRoot))
@@ -23,10 +25,18 @@ namespace VisionApiDemo.Core
             _visionServiceClient = new VisionServiceClient(SubscriptionKey, ApiRoot);
         }
 
-        public async Task<AnalysisResult> AnalyzeUrl(string imageUrl, VisualFeature[] visualFeatures)
+        public async Task<string> AnalyzeUrlAsync(string imageUrl, Enums.VisualFeature visualFeature)
         {
-            AnalysisResult analysisResult = await _visionServiceClient.AnalyzeImageAsync(imageUrl, visualFeatures);
-            return analysisResult;
+            AnalysisResult analysisResult = await _visionServiceClient.AnalyzeImageAsync(imageUrl, new [] { (VisualFeature)visualFeature});
+            string formattedResultString = AnalisysHelper.GetInfo(analysisResult, (VisualFeature)visualFeature);
+            return formattedResultString;
+        }
+
+        public async Task<string> AnalyzeImageFromDisk(Stream imageStream, Enums.VisualFeature visualFeature)
+        {
+            AnalysisResult analysisResult = await _visionServiceClient.AnalyzeImageAsync(imageStream, new [] { (VisualFeature)visualFeature });
+            string formattedResultString = AnalisysHelper.GetInfo(analysisResult, (VisualFeature)visualFeature);
+            return formattedResultString;
         }
     }
 }

@@ -3,31 +3,37 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         x:Class="ComputerVisionDemo.MainWindow"
+        xmlns:viewModel="clr-namespace:ComputerVisionDemo"
+        xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
+        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         mc:Ignorable="d"
         Title="MainWindow"
         MinHeight="500"
         MinWidth="800"
         Height="720"
         Width="1280">
-       <Grid>
+    <Window.Resources>
+        <viewModel:RecogImageViewModel x:Key="ViewModel" />
+    </Window.Resources>
+    <Grid DataContext="{Binding Source={StaticResource ViewModel}}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="2*" />
             <ColumnDefinition Width="1*" />
         </Grid.ColumnDefinitions>
-        
         <Image Grid.Column="0"
                Grid.RowSpan="3"
                HorizontalAlignment="Stretch"
                Margin="20"
-               Name="ImageContainer"/>
-       
+               Source="{Binding ImageSourceObject}"
+               Name="ImageContainer" />
+
         <Grid Grid.Row="0"
               Grid.Column="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="9*" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
+                <RowDefinition Height="*" />
                 <RowDefinition Height="150" />
             </Grid.RowDefinitions>
             <RichTextBox  Grid.Row="0"
@@ -41,7 +47,7 @@
                     <RowDefinition Height="1*" />
                     <RowDefinition Height="1*" />
                 </Grid.RowDefinitions>
-                
+
                 <StackPanel Grid.Row="0">
                     <Label Content="_Recognize image from URL:"
                            Margin="20,0,20,0"
@@ -50,7 +56,13 @@
                              Name="ImageUrlTextBox"
                              Margin="20,0,20,0"
                              HorizontalAlignment="Stretch"
-                             TextChanged="ImageUrlTextBox_TextChanged" />
+                             Text="{Binding ImageUrlPath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="TextChanged">
+                                <ei:CallMethodAction MethodName="UrlAddressTextChanged" />
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </TextBox>
                 </StackPanel>
                 <Grid Grid.Row="2">
                     <Grid.ColumnDefinitions>
@@ -65,18 +77,25 @@
                         <ComboBox Margin="20,0,10,0"
                                   Height="25"
                                   Name="VisualFeautures"
-                                  HorizontalAlignment="Stretch"/>
+                                  ItemsSource="{Binding VisualFeatures}"
+                                  SelectedItem="{Binding SelectedVisualFeature}"
+                                  HorizontalAlignment="Stretch" />
                     </StackPanel>
                     <StackPanel Grid.Column="1">
-                        <Label Content=""
-                               />
+                        <Label Content="" />
                         <Button Content="Recognize"
                                 Height="25"
                                 Width="90"
                                 HorizontalAlignment="Right"
                                 Margin="0,0,20,0"
                                 Name="RunAsyncRecogButton"
-                                Click="RecognizeAsyncButtonClick" />
+                                Click="RecognizeAsyncButtonClick" >
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="OnClick">
+                                    <ei:CallMethodAction TargetObject="{Binding}" MethodName="AsyncRecognizeImage" />
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </Button>
                     </StackPanel>
                 </Grid>
             </Grid>

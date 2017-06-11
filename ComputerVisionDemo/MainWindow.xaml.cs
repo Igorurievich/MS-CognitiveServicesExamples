@@ -1,10 +1,9 @@
-﻿using Microsoft.ProjectOxford.Vision.Contract;
-using Microsoft.ProjectOxford.Vision;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Media.Imaging;
 using System;
 using System.Windows.Controls;
 using VisionApiDemo.Core;
+using VisionApiDemo.Core.Enums;
 
 namespace ComputerVisionDemo
 {
@@ -20,15 +19,16 @@ namespace ComputerVisionDemo
         {
             InitializeComponent();
             
-            VisualFeautures.ItemsSource = Enum.GetValues(typeof(VisualFeature));
+            //VisualFeautures.ItemsSource = Enum.GetValues(typeof(VisualFeature));
         }
 
         private async void RecognizeAsyncButtonClick(object sender, RoutedEventArgs e)
         { 
             RunAsyncRecogButton.IsEnabled = false;
 
-            AnalysisResult analysisResult = await _recognizer.AnalyzeUrl(ImageUrlTextBox.Text, new[] { (VisualFeature)VisualFeautures.SelectedItem});
-            ImagesRichTextBox.AppendText(AnalisysHelper.GetInfo(analysisResult, (VisualFeature)VisualFeautures.SelectedItem));
+            //string resultString = await _recognizer.AnalyzeUrlAsync(ImageUrlTextBox.Text, new[] { (VisualFeature)VisualFeautures.SelectedItem});
+            //ImagesRichTextBox.AppendText(resultString);
+
             RunAsyncRecogButton.IsEnabled = true;
         }
 
