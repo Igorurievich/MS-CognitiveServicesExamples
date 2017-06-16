@@ -55,6 +55,7 @@
                        Margin="15,5,0,5"
                        Text="Mode:" />
             <ComboBox x:Name="ModeList"
+                      ItemsSource="{Binding RecognizeMode}"
                       Width="100"
                       Margin="5,5,0,5"
                        />

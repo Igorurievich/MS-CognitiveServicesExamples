@@ -15,26 +15,33 @@ using VisionApiDemo.Core;
 using Color = System.Drawing.Color;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.Threading.Tasks;
+using VisionApiDemo.Core.Enums;
 
 namespace VisionApiStreamDemo
 {
     public class RecogStreamViewModel : ViewModelBase
     {
+        #region Fields
         private readonly Recognizer _recognizer;
         private FilterInfoCollection _localCameraDevicesList;
         private IEnumerable<string> _recognizeMode;
-        private ImageSource _actualFrame;
         private Image _actualFrameImage;
         private ImageSource _streamImageSourceObj;
         private ImageSource _actualFrameSourceObj;
         private VideoCaptureDevice _localWebCam;
         private BackgroundWorker _backgroudWorker;
+        private string _selectedRecognizeMode;
+        #endregion
 
+        #region Commands
         public ICommand WindowLoaded { get; set; }
         public ICommand StartVideoCameraStream { get; set; }
         public ICommand ReleaseResourcesBeforeClosing { get; set; }
         public ICommand StopVideoCameraStream { get; set; }
+        #endregion
 
+        #region Properties
         public FilterInfoCollection LocalCameraDevicesCollection
         {
             get { return _localCameraDevicesList; }
@@ -71,6 +78,16 @@ namespace VisionApiStreamDemo
                 NotifyPropertyChanged(nameof(ActualFrameSourceObj));
             }
         }
+        public string SelectedRecognizeMode
+        {
+            get { return _selectedRecognizeMode; }
+            set
+            {
+                _selectedRecognizeMode = value;
+                NotifyPropertyChanged(nameof(SelectedRecognizeMode));
+            }
+        }
+        #endregion
 
         public RecogStreamViewModel()
         {
@@ -81,41 +98,23 @@ namespace VisionApiStreamDemo
             _backgroudWorker.DoWork += WorkerOnDoWork;
             _backgroudWorker.WorkerSupportsCancellation = true;
 
-            InitializeCommand();
+            RecognizeMode = new List<string>
+            {
+               Globals.FacesMode,
+               Globals.EmotionsMode,
+               Globals.FacesWithEmotionsMode,
+               Globals.TagsMode,
+               Globals.DescriptionMode
+            };
+            InitializeCommands();
         }
 
-        private void InitializeCommand()
+        private void InitializeCommands()
         {
             WindowLoaded = new ActionCommand(WindowLoadedCallback);
             StartVideoCameraStream = new ActionCommand(StartVideoCameraStreamCallback);
             ReleaseResourcesBeforeClosing = new ActionCommand(ReleaseResourcesBeforeClosingCallback);
             StopVideoCameraStream = new ActionCommand(StopVideoCameraStreamCallback);
-        }
-
-        private void StopVideoCameraStreamCallback()
-        {
-            if (_backgroudWorker.IsBusy)
-            {
-                _backgroudWorker.CancelAsync();
-            }
-            _backgroudWorker.CancelAsync();
-
-            if (_localWebCam == null) return;
-            if (_localWebCam.IsRunning)
-            {
-                _localWebCam.SignalToStop();
-                _localWebCam = null;
-            }
-        }
-
-        private void ReleaseResourcesBeforeClosingCallback()
-        {
-            StopVideoCameraStreamCallback();
-        }
-
-        public void WindowLoadedCallback()
-        {
-            
         }
 
         private void WorkerOnDoWork(object sender, DoWorkEventArgs doWorkEventArgs)
@@ -126,20 +125,13 @@ namespace VisionApiStreamDemo
             while (!_backgroudWorker.CancellationPending)
             {
                 var tempActualFrame = _actualFrameImage;
-
+                
+                //
                 tempActualFrame = DrawRectangleOnFrame(tempActualFrame);
+                recognizeFrameAsync();
+                //
 
-                MemoryStream ms = new MemoryStream();
-                tempActualFrame.Save(ms, ImageFormat.Bmp);
-                ms.Seek(0, SeekOrigin.Begin);
-                BitmapImage bi = new BitmapImage();
-                bi.BeginInit();
-                bi.StreamSource = ms;
-                bi.EndInit();
-                bi.Freeze();
-
-                ActualFrameSourceObj = bi;
-
+                ActualFrameSourceObj = convertImageToBI(tempActualFrame);
                 Thread.Sleep(delay);
             }
             
@@ -151,18 +143,7 @@ namespace VisionApiStreamDemo
             try
             {
                 Image img = (Bitmap)eventArgs.Frame.Clone();
-
-                MemoryStream ms = new MemoryStream();
-                img.Save(ms, ImageFormat.Bmp);
-                ms.Seek(0, SeekOrigin.Begin);
-                BitmapImage bi = new BitmapImage();
-                bi.BeginInit();
-                bi.StreamSource = ms;
-                bi.EndInit();
-                bi.Freeze();
-                
-                StreamImageSourceObj = bi;
-                _actualFrame = bi;
+                StreamImageSourceObj = convertImageToBI((Bitmap)eventArgs.Frame.Clone());
                 _actualFrameImage = img;
             }
             catch (Exception ex)
@@ -183,6 +164,44 @@ namespace VisionApiStreamDemo
             bi.Freeze();
             return bi;
         }
+        
+        private Image DrawRectangleOnFrame(Image sourceImage)
+        {
+            using (Graphics g = Graphics.FromImage(sourceImage))
+            {
+                g.DrawRectangle(new System.Drawing.Pen(System.Drawing.Brushes.Red, 5),
+                    new Rectangle(50, 50, 100, 100));
+
+                return sourceImage;
+            }
+        }
+
+        private async Task recognizeFrameAsync()
+        {
+            switch (SelectedRecognizeMode)
+            {
+                case Globals.DescriptionMode:
+
+                    //string resultString = await _recognizer.AnalyzeUrlAsync(, SelectedVisualFeature);
+                    //AnalysisResultText = resultString;
+
+                    break;
+                case Globals.EmotionsMode:
+
+                    break;
+                case Globals.FacesMode:
+
+                    break;
+                case Globals.FacesWithEmotionsMode:
+
+                    break;
+                case Globals.TagsMode:
+
+                    break;
+            }
+        }
+
+        #region Commands implementation
 
         public void StartVideoCameraStreamCallback()
         {
@@ -198,15 +217,32 @@ namespace VisionApiStreamDemo
             }
         }
 
-        private Image DrawRectangleOnFrame(Image sourceImage)
+        private void ReleaseResourcesBeforeClosingCallback()
         {
-            using (Graphics g = Graphics.FromImage(sourceImage))
-            {
-                g.DrawRectangle(new System.Drawing.Pen(System.Drawing.Brushes.Red, 5),
-                    new Rectangle(50, 50, 100, 100));
+            StopVideoCameraStreamCallback();
+        }
 
-                return sourceImage;
+        public void WindowLoadedCallback()
+        {
+
+        }
+
+        private void StopVideoCameraStreamCallback()
+        {
+            if (_backgroudWorker.IsBusy)
+            {
+                _backgroudWorker.CancelAsync();
+            }
+            _backgroudWorker.CancelAsync();
+
+            if (_localWebCam == null) return;
+            if (_localWebCam.IsRunning)
+            {
+                _localWebCam.SignalToStop();
+                _localWebCam = null;
             }
         }
+
+        #endregion
     }
 }

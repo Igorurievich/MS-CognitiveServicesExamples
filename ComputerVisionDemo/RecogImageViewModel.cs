@@ -12,7 +12,6 @@ namespace ComputerVisionDemo
     public class RecogImageViewModel : ViewModelBase
     {
         #region Fields
-
         private IEnumerable<VisualFeature> _visualFeatures;
         private VisualFeature _selectedVisualFeature;
         private readonly Recognizer _recognizer;
@@ -20,7 +19,6 @@ namespace ComputerVisionDemo
         private string _analysisResultText;
         private string _imageUrlString;
         private bool _isRecogButtonEnabled;
-
         #endregion
 
         #region  Properties 
