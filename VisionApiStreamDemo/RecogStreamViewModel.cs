@@ -24,6 +24,7 @@ namespace VisionApiStreamDemo
         private FilterInfoCollection _localCameraDevicesList;
         private IEnumerable<string> _recognizeMode;
         private ImageSource _actualFrame;
+        private Image _actualFrameImage;
         private ImageSource _streamImageSourceObj;
         private ImageSource _actualFrameSourceObj;
         private VideoCaptureDevice _localWebCam;
@@ -109,17 +110,7 @@ namespace VisionApiStreamDemo
 
         private void ReleaseResourcesBeforeClosingCallback()
         {
-            if (_backgroudWorker.IsBusy)
-            {
-                _backgroudWorker.CancelAsync();
-            }
-
-            if (_localWebCam == null) return;
-            if (_localWebCam.IsRunning)
-            {
-                _localWebCam.SignalToStop();
-                _localWebCam = null;
-            }
+            StopVideoCameraStreamCallback();
         }
 
         public void WindowLoadedCallback()
@@ -134,7 +125,20 @@ namespace VisionApiStreamDemo
 
             while (!_backgroudWorker.CancellationPending)
             {
-                ActualFrameSourceObj = _actualFrame;
+                var tempActualFrame = _actualFrameImage;
+
+                tempActualFrame = DrawRectangleOnFrame(tempActualFrame);
+
+                MemoryStream ms = new MemoryStream();
+                tempActualFrame.Save(ms, ImageFormat.Bmp);
+                ms.Seek(0, SeekOrigin.Begin);
+                BitmapImage bi = new BitmapImage();
+                bi.BeginInit();
+                bi.StreamSource = ms;
+                bi.EndInit();
+                bi.Freeze();
+
+                ActualFrameSourceObj = bi;
 
                 Thread.Sleep(delay);
             }
@@ -159,6 +163,7 @@ namespace VisionApiStreamDemo
                 
                 StreamImageSourceObj = bi;
                 _actualFrame = bi;
+                _actualFrameImage = img;
             }
             catch (Exception ex)
             {
@@ -188,6 +193,7 @@ namespace VisionApiStreamDemo
 
             if (!_backgroudWorker.IsBusy)
             {
+                Thread.Sleep(1000);
                 _backgroudWorker.RunWorkerAsync();
             }
         }
@@ -196,9 +202,6 @@ namespace VisionApiStreamDemo
         {
             using (Graphics g = Graphics.FromImage(sourceImage))
             {
-                System.Drawing.Color customColor = Color.FromArgb(50, Color.Black);
-                SolidBrush shadowBrush = new SolidBrush(customColor);
-
                 g.DrawRectangle(new System.Drawing.Pen(System.Drawing.Brushes.Red, 5),
                     new Rectangle(50, 50, 100, 100));
 
