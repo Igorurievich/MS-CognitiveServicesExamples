@@ -5,7 +5,22 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:VisionApiStreamDemo"
         mc:Ignorable="d"
+        
+        xmlns:viewModel="clr-namespace:VisionApiStreamDemo"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
         Title="MainWindow" Height="350" Width="525">
+
+    <Window.DataContext>
+        <local:RecogStreamViewModel />
+    </Window.DataContext>
+
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Closing">
+            <i:InvokeCommandAction Command="{Binding ReleaseResourcesBeforeClosing}" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="35" />
@@ -17,24 +32,32 @@
                     Name="ButtonBar">
             <ComboBox x:Name="CameraList"
                       Width="100"
-                      Margin="5,5,0,5"
-                      Loaded="CameraList_Loaded" />
+                      Margin="5,5,0,5"/>
             <Button Content="Start Camera"
                     Padding="5,0"
-                    Margin="5,5,0,5"
-                    Click="StartButton_Click" />
+                    Margin="5,5,0,5">
+                <i:Interaction.Triggers>
+                <i:EventTrigger EventName="Click">
+                        <i:InvokeCommandAction Command="{Binding StartVideoCameraStream}" />
+                </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </Button>
             <Button Content="Stop Camera"
                     Padding="5,0"
-                    Margin="5,5,0,5"
-                    Click="StopButton_Click" />
+                    Margin="5,5,0,5">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Click">
+                        <i:InvokeCommandAction Command="{Binding StopVideoCameraStream}" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </Button>
             <TextBlock VerticalAlignment="Center"
                        Margin="15,5,0,5"
                        Text="Mode:" />
             <ComboBox x:Name="ModeList"
                       Width="100"
                       Margin="5,5,0,5"
-                      Loaded="ModeList_Loaded"
-                      SelectionChanged="ModeList_SelectionChanged" />
+                       />
         </StackPanel>
         
         <Grid Grid.Row="1">
@@ -44,11 +67,13 @@
             </Grid.ColumnDefinitions>
             <Image x:Name="LeftImage"
                    Grid.Column="0"
+                   Source="{Binding StreamImageSourceObj}"
                    Margin="5" />
             <Image x:Name="RightImage"
                    Grid.Column="1"
                    Margin="5"
-                   Panel.ZIndex="1" />
+                   Panel.ZIndex="1"
+                   Source="{Binding ActualFrameSourceObj}" />
         </Grid>
         <TextBlock Name="MessageArea"
                    Margin="5"

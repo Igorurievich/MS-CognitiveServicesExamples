@@ -36,12 +36,16 @@
                 <RowDefinition Height="*" />
                 <RowDefinition Height="150" />
             </Grid.RowDefinitions>
-            <RichTextBox  Grid.Row="0"
-                          IsReadOnly="True"
-                          HorizontalAlignment="Stretch"
-                          VerticalAlignment="Stretch"
-                          x:Name="ImagesRichTextBox"
-                          Margin="20,0,20,20" />
+            <TextBox  Grid.Row="0"
+                      IsReadOnly="True"
+                      TextWrapping="Wrap"
+                      AcceptsReturn="True"
+                      HorizontalAlignment="Stretch"
+                      VerticalAlignment="Stretch"
+                      x:Name="ImagesRichTextBox"
+                      Text="{Binding AnalysisResultText, Mode=TwoWay}"
+                      Margin="20,0,20,20">
+            </TextBox>
             <Grid Row="1">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="1*" />
@@ -81,6 +85,7 @@
                                   SelectedItem="{Binding SelectedVisualFeature}"
                                   HorizontalAlignment="Stretch" />
                     </StackPanel>
+                    
                     <StackPanel Grid.Column="1">
                         <Label Content="" />
                         <Button Content="Recognize"
@@ -88,11 +93,12 @@
                                 Width="90"
                                 HorizontalAlignment="Right"
                                 Margin="0,0,20,0"
-                                Name="RunAsyncRecogButton"
-                                Click="RecognizeAsyncButtonClick" >
+                                IsEnabled="{Binding IsRecogButtonEnabled}"
+                                Name="RunAsyncRecogButton">
                             <i:Interaction.Triggers>
-                                <i:EventTrigger EventName="OnClick">
-                                    <ei:CallMethodAction TargetObject="{Binding}" MethodName="AsyncRecognizeImage" />
+                                <i:EventTrigger EventName="Click">
+                                    <ei:CallMethodAction TargetObject="{Binding}"
+                                                         MethodName="AsyncRecognizeImage" />
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
                         </Button>

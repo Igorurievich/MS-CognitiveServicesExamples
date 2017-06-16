@@ -8,18 +8,22 @@ using VisionApiDemo.Core.Enums;
 
 namespace ComputerVisionDemo
 {
+    ///*https://pp.userapi.com/c836231/v836231496/2ad35/BXrrAm_FzLM.jpg*/
     public class RecogImageViewModel : ViewModelBase
     {
+        #region Fields
+
         private IEnumerable<VisualFeature> _visualFeatures;
         private VisualFeature _selectedVisualFeature;
         private readonly Recognizer _recognizer;
         private ImageSource _imageSourceObject;
-
         private string _analysisResultText;
         private string _imageUrlString;
-        
         private bool _isRecogButtonEnabled;
-        
+
+        #endregion
+
+        #region  Properties 
         public IEnumerable<VisualFeature> VisualFeatures
         {
             get
@@ -44,7 +48,6 @@ namespace ComputerVisionDemo
                 NotifyPropertyChanged(nameof(SelectedVisualFeature));
             }
         }
-
         public string AnalysisResultText
         {
             get
@@ -57,7 +60,6 @@ namespace ComputerVisionDemo
                 NotifyPropertyChanged(nameof(AnalysisResultText));
             }
         }
-
         public string ImageUrlPath
         {
             get
@@ -71,7 +73,6 @@ namespace ComputerVisionDemo
                 UrlAddressTextChanged();
             }
         }
-
         public bool IsRecogButtonEnabled
         {
             get
@@ -84,7 +85,6 @@ namespace ComputerVisionDemo
                 NotifyPropertyChanged(nameof(IsRecogButtonEnabled));
             }
         }
-
         public ImageSource ImageSourceObject
         {
             get { return _imageSourceObject; }
@@ -94,6 +94,8 @@ namespace ComputerVisionDemo
                 NotifyPropertyChanged(nameof(ImageSourceObject));
             }
         }
+
+        #endregion
 
         public RecogImageViewModel()
         {
@@ -106,7 +108,6 @@ namespace ComputerVisionDemo
             IsRecogButtonEnabled = false;
 
             string resultString = await _recognizer.AnalyzeUrlAsync(ImageUrlPath, SelectedVisualFeature);
-
             AnalysisResultText = resultString;
 
             IsRecogButtonEnabled = true;
@@ -120,7 +121,8 @@ namespace ComputerVisionDemo
             b.EndInit();
 
             ImageSourceObject = b;
-        }
 
+            IsRecogButtonEnabled = ImageSourceObject != null;
+        }
     }
 }

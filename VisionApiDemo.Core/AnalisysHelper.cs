@@ -71,8 +71,6 @@ namespace VisionApiDemo.Core
                     resultString += "Image width: " + result.Metadata.Width + "\n";
                     break;
             }
-            resultString += "______________________________________________________\n";
-
             return resultString;
         }
     }
