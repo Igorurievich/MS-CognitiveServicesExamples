@@ -14,7 +14,7 @@ namespace ComputerVisionDemo
         #region Fields
         private IEnumerable<VisualFeature> _visualFeatures;
         private VisualFeature _selectedVisualFeature;
-        private readonly Recognizer _recognizer;
+        private readonly VisionRecognizer _recognizer;
         private ImageSource _imageSourceObject;
         private string _analysisResultText;
         private string _imageUrlString;
@@ -98,7 +98,7 @@ namespace ComputerVisionDemo
         public RecogImageViewModel()
         {
             VisualFeatures = Enum.GetValues(typeof(VisualFeature)).Cast<VisualFeature>();
-            _recognizer = new Recognizer("9d5344f8aebf4d76928f4244fa87294a", "https://westeurope.api.cognitive.microsoft.com/vision/v1.0");
+            _recognizer = new VisionRecognizer("9d5344f8aebf4d76928f4244fa87294a", "https://westeurope.api.cognitive.microsoft.com/vision/v1.0");
         }
 
         public async void AsyncRecognizeImage()

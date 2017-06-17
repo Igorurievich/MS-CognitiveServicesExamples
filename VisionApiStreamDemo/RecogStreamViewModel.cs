@@ -23,7 +23,7 @@ namespace VisionApiStreamDemo
     public class RecogStreamViewModel : ViewModelBase
     {
         #region Fields
-        private readonly Recognizer _recognizer;
+        private readonly VisionRecognizer _recognizer;
         private FilterInfoCollection _localCameraDevicesList;
         private IEnumerable<string> _recognizeMode;
         private Image _actualFrameImage;
@@ -91,7 +91,7 @@ namespace VisionApiStreamDemo
 
         public RecogStreamViewModel()
         {
-            _recognizer = new Recognizer("9d5344f8aebf4d76928f4244fa87294a", "https://westeurope.api.cognitive.microsoft.com/vision/v1.0");
+            _recognizer = new VisionRecognizer("6c8189eb1bfc4ca1bb608261e7d56052", "https://westeurope.api.cognitive.microsoft.com/vision/v1.0");
             LocalCameraDevicesCollection = new FilterInfoCollection(FilterCategory.VideoInputDevice);
            
             _backgroudWorker = new BackgroundWorker();

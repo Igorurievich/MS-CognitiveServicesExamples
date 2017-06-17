@@ -5,14 +5,14 @@ using Microsoft.ProjectOxford.Vision.Contract;
 
 namespace VisionApiDemo.Core
 {
-    public class Recognizer
+    public class VisionRecognizer
     {
         public string SubscriptionKey { get; }
         public string ApiRoot { get; }
 
         private readonly VisionServiceClient _visionServiceClient;
 
-        public Recognizer(string subscriptionKey, string apiRoot)
+        public VisionRecognizer(string subscriptionKey, string apiRoot)
         {
             if (string.IsNullOrEmpty(subscriptionKey) || string.IsNullOrEmpty(apiRoot))
             {
