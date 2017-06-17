@@ -91,7 +91,7 @@ namespace VisionApiStreamDemo
 
         public RecogStreamViewModel()
         {
-            _recognizer = new VisionRecognizer("6c8189eb1bfc4ca1bb608261e7d56052", "https://westeurope.api.cognitive.microsoft.com/vision/v1.0");
+            _recognizer = new VisionRecognizer(TextFileHelper.VisionKey, TextFileHelper.VisionEndpoint);
             LocalCameraDevicesCollection = new FilterInfoCollection(FilterCategory.VideoInputDevice);
            
             _backgroudWorker = new BackgroundWorker();
@@ -128,7 +128,6 @@ namespace VisionApiStreamDemo
                 
                 //
                 tempActualFrame = DrawRectangleOnFrame(tempActualFrame);
-                recognizeFrameAsync();
                 //
 
                 ActualFrameSourceObj = convertImageToBI(tempActualFrame);
