@@ -1,7 +1,9 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Threading.Tasks;
 using Microsoft.ProjectOxford.Vision;
 using Microsoft.ProjectOxford.Vision.Contract;
+using VisionApiDemo.Core.Helpers;
 
 namespace VisionApiDemo.Core
 {
@@ -26,15 +28,23 @@ namespace VisionApiDemo.Core
         public async Task<string> AnalyzeUrlAsync(string imageUrl, Enums.VisualFeature visualFeature)
         {
             AnalysisResult analysisResult = await _visionServiceClient.AnalyzeImageAsync(imageUrl, new [] { (VisualFeature)visualFeature});
-            string formattedResultString = AnalisysHelper.GetInfo(analysisResult, (VisualFeature)visualFeature);
+            string formattedResultString = AnalisysHelper.GetVisionInfo(analysisResult, (VisualFeature)visualFeature);
             return formattedResultString;
         }
 
         public async Task<string> AnalyzeImageFromDisk(Stream imageStream, Enums.VisualFeature visualFeature)
         {
-            AnalysisResult analysisResult = await _visionServiceClient.AnalyzeImageAsync(imageStream, new [] { (VisualFeature)visualFeature });
-            string formattedResultString = AnalisysHelper.GetInfo(analysisResult, (VisualFeature)visualFeature);
-            return formattedResultString;
+            try
+            {
+                AnalysisResult analysisResult = await _visionServiceClient.AnalyzeImageAsync(imageStream, new[] { (VisualFeature)visualFeature });
+                string formattedResultString = AnalisysHelper.GetVisionInfo(analysisResult, (VisualFeature)visualFeature);
+                return formattedResultString;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return null;
+            }
         }
     }
 }

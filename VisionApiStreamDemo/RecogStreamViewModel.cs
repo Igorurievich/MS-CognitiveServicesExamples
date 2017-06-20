@@ -1,29 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-
 using System.IO;
 using System.Threading;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Threading;
 using AForge.Video;
 using AForge.Video.DirectShow;
 using Microsoft.Expression.Interactivity.Core;
 using VisionApiDemo.Core;
-using Color = System.Drawing.Color;
 using System.Drawing;
 using System.Drawing.Imaging;
-using System.Threading.Tasks;
 using VisionApiDemo.Core.Enums;
+using VisionApiDemo.Core.Helpers;
 
 namespace VisionApiStreamDemo
 {
     public class RecogStreamViewModel : ViewModelBase
     {
         #region Fields
-        private readonly VisionRecognizer _recognizer;
+        private readonly VisionRecognizer _visionRecognizer;
+        private readonly FaceRecognizer _faceRecognizer;
+        private readonly EmotionRecognizer _emotionRecognizer;
         private FilterInfoCollection _localCameraDevicesList;
         private IEnumerable<string> _recognizeMode;
         private Image _actualFrameImage;
@@ -91,7 +90,10 @@ namespace VisionApiStreamDemo
 
         public RecogStreamViewModel()
         {
-            _recognizer = new VisionRecognizer(TextFileHelper.VisionKey, TextFileHelper.VisionEndpoint);
+            _visionRecognizer = new VisionRecognizer(TextFileHelper.VisionKey, TextFileHelper.VisionEndpoint);
+            _faceRecognizer = new FaceRecognizer(TextFileHelper.FacesKey, TextFileHelper.FacesEndpoint);
+            _emotionRecognizer = new EmotionRecognizer(TextFileHelper.EmotionsKey, TextFileHelper.EmotionsEndpoint);
+
             LocalCameraDevicesCollection = new FilterInfoCollection(FilterCategory.VideoInputDevice);
            
             _backgroudWorker = new BackgroundWorker();
@@ -128,21 +130,22 @@ namespace VisionApiStreamDemo
                 
                 //
                 tempActualFrame = DrawRectangleOnFrame(tempActualFrame);
+                //RecognizeFrameAsync();
                 //
 
-                ActualFrameSourceObj = convertImageToBI(tempActualFrame);
+                ActualFrameSourceObj = ConvertImageToBi(tempActualFrame);
                 Thread.Sleep(delay);
             }
             
             doWorkEventArgs.Cancel = true;
         }
 
-        public void video_NewFrame(object sender, NewFrameEventArgs eventArgs)
+        private void video_NewFrame(object sender, NewFrameEventArgs eventArgs)
         {
             try
             {
                 Image img = (Bitmap)eventArgs.Frame.Clone();
-                StreamImageSourceObj = convertImageToBI((Bitmap)eventArgs.Frame.Clone());
+                StreamImageSourceObj = ConvertImageToBi((Bitmap)eventArgs.Frame.Clone());
                 _actualFrameImage = img;
             }
             catch (Exception ex)
@@ -151,7 +154,7 @@ namespace VisionApiStreamDemo
             }
         }
 
-        private static BitmapImage convertImageToBI(Image img)
+        private static BitmapImage ConvertImageToBi(Image img)
         {
             MemoryStream ms = new MemoryStream();
             img.Save(ms, ImageFormat.Bmp);
@@ -175,15 +178,15 @@ namespace VisionApiStreamDemo
             }
         }
 
-        private async Task recognizeFrameAsync()
+        private async void RecognizeFrameAsync()
         {
             switch (SelectedRecognizeMode)
             {
                 case Globals.DescriptionMode:
 
-                    //string resultString = await _recognizer.AnalyzeUrlAsync(, SelectedVisualFeature);
-                    //AnalysisResultText = resultString;
-
+                    var tempActualFrame = _actualFrameImage;
+                    string resultString = await _visionRecognizer.AnalyzeImageFromDisk(tempActualFrame.ToStream(ImageFormat.Jpeg), VisualFeature.Description);
+                    
                     break;
                 case Globals.EmotionsMode:
 
@@ -199,6 +202,7 @@ namespace VisionApiStreamDemo
                     break;
             }
         }
+
 
         #region Commands implementation
 
@@ -245,3 +249,5 @@ namespace VisionApiStreamDemo
         #endregion
     }
 }
+
+

@@ -1,12 +1,13 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Microsoft.ProjectOxford.Vision;
 using Microsoft.ProjectOxford.Vision.Contract;
 
-namespace VisionApiDemo.Core
+namespace VisionApiDemo.Core.Helpers
 {
     public class AnalisysHelper
     {
-        public static string GetInfo(AnalysisResult result, VisualFeature visualFeature)
+        public static string GetVisionInfo(AnalysisResult result, VisualFeature visualFeature)
         {
             string resultString = string.Empty;
             switch (visualFeature)
@@ -72,6 +73,18 @@ namespace VisionApiDemo.Core
                     break;
             }
             return resultString;
+        }
+
+        public static string GetFaceInfo()
+        {
+            new NotImplementedException();
+            return null;
+        }
+
+        public static string GetEmotionInfo()
+        {
+            new NotImplementedException();
+            return null;
         }
     }
 }

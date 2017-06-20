@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using VisionApiDemo.Core;
 
-namespace VisionApiDemo.Core
+namespace VisionApiDemo.Core.Helpers
 {
     public static class TextFileHelper
     {
