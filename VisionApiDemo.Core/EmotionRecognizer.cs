@@ -31,7 +31,7 @@ namespace VisionApiDemo.Core
         public async Task<string> AnalyzeUrlAsync(string imageUrl, Rectangle[] faceRectangles)
         {
             var analysisResult = await _faceServiceClient.RecognizeAsync(imageUrl, faceRectangles);
-            string formattedResultString = AnalisysHelper.GetFaceInfo();
+            string formattedResultString = AnalisysHelper.GetEmotionInfo();
             return formattedResultString;
         }
 
@@ -40,7 +40,7 @@ namespace VisionApiDemo.Core
             try
             {
                 var analysisResult = await _faceServiceClient.RecognizeAsync(imageStream, faceRectangles);
-                string formattedResultString = AnalisysHelper.GetFaceInfo();
+                string formattedResultString = AnalisysHelper.GetEmotionInfo();
                 return formattedResultString;
             }
             catch (Exception e)

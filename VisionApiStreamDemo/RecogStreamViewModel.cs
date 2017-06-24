@@ -127,13 +127,7 @@ namespace VisionApiStreamDemo
             while (!_backgroudWorker.CancellationPending)
             {
                 var tempActualFrame = _actualFrameImage;
-                
-                //
-                tempActualFrame = DrawRectangleOnFrame(tempActualFrame);
-                //RecognizeFrameAsync();
-                //
-
-                ActualFrameSourceObj = ConvertImageToBi(tempActualFrame);
+                RecognizeFrameAsync();
                 Thread.Sleep(delay);
             }
             
@@ -167,32 +161,38 @@ namespace VisionApiStreamDemo
             return bi;
         }
         
-        private Image DrawRectangleOnFrame(Image sourceImage)
+        private Image DrawRectangleOnFrame(Image sourceImage, List<FacePosition> faces)
         {
-            using (Graphics g = Graphics.FromImage(sourceImage))
+            foreach (var face in faces)
             {
-                g.DrawRectangle(new System.Drawing.Pen(System.Drawing.Brushes.Red, 5),
-                    new Rectangle(50, 50, 100, 100));
-
-                return sourceImage;
+                if (sourceImage == null)
+                {
+                    return null;
+                }
+                using (Graphics g = Graphics.FromImage(sourceImage))
+                {
+                    g.DrawRectangle(new System.Drawing.Pen(System.Drawing.Brushes.Red, 5),
+                        new Rectangle(face.Down, face.Top, face.Width, face.Height));
+                }
             }
+            return sourceImage;
         }
 
         private async void RecognizeFrameAsync()
         {
+            Image tempImage;
             switch (SelectedRecognizeMode)
             {
                 case Globals.DescriptionMode:
-
-                    var tempActualFrame = _actualFrameImage;
-                    string resultString = await _visionRecognizer.AnalyzeImageFromDisk(tempActualFrame.ToStream(ImageFormat.Jpeg), VisualFeature.Description);
-                    
+                    tempImage = _actualFrameImage;
+                    string resultString = await _visionRecognizer.AnalyzeImageFromDisk(tempImage.ToStream(ImageFormat.Jpeg), VisualFeature.Description);
                     break;
                 case Globals.EmotionsMode:
-
+                    tempImage = _actualFrameImage;
                     break;
                 case Globals.FacesMode:
-
+                    tempImage = _actualFrameImage;
+                    ActualFrameSourceObj = ConvertImageToBi(DrawRectangleOnFrame(tempImage, await _faceRecognizer.AnalyzeImageFromDisk(tempImage.ToStream(ImageFormat.Jpeg))));
                     break;
                 case Globals.FacesWithEmotionsMode:
 

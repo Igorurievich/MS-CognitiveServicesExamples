@@ -2,6 +2,7 @@
 using System.Linq;
 using Microsoft.ProjectOxford.Vision;
 using Microsoft.ProjectOxford.Vision.Contract;
+using System.Collections.Generic;
 
 namespace VisionApiDemo.Core.Helpers
 {
@@ -18,19 +19,19 @@ namespace VisionApiDemo.Core.Helpers
                     break;
 
                 case VisualFeature.Categories:
-                    foreach (var item in result.Categories)
+                    foreach (var category in result.Categories)
                     {
-                        resultString += "Category name: " + item.Name + "\r";
-                        resultString += "\tCategory details: " + item.Detail + "\r";
-                        resultString += "\tCategory score: " + item.Score + "\n";
+                        resultString += "Category name: " + category.Name + "\r";
+                        resultString += "\tCategory details: " + category.Detail + "\r";
+                        resultString += "\tCategory score: " + category.Score + "\n";
                     }
                     break;
 
                 case VisualFeature.Description:
-                    foreach (var item in result.Description.Captions)
+                    foreach (var captions in result.Description.Captions)
                     {
-                        resultString += "Caption text: " + item.Text + "\r";
-                        resultString += "Caption confidence: " + item.Confidence + "\n";
+                        resultString += "Caption text: " + captions.Text + "\r";
+                        resultString += "Caption confidence: " + captions.Confidence + "\n";
                     }
                     break;
                 case VisualFeature.Color:
@@ -42,22 +43,20 @@ namespace VisionApiDemo.Core.Helpers
                     break;
 
                 case VisualFeature.Faces:
-
-                    foreach (var item in result.Faces)
+                    foreach (var faces in result.Faces)
                     {
-                        resultString += "Face age: " + item.Age + "\r";
-                        resultString += "Face position: " + item.FaceRectangle + "\r";
-                        resultString += "Face gender: " + item.Gender + "\n";
+                        resultString += "Face age: " + faces.Age + "\r";
+                        resultString += "Face position: " + faces.FaceRectangle + "\r";
+                        resultString += "Face gender: " + faces.Gender + "\n";
                     }
                     break;
 
                 case VisualFeature.Tags:
                     resultString += "Tags: " + "\n";
-                    foreach (var item in result.Tags)
+                    foreach (var tags in result.Tags)
                     {
-                        resultString += "\tTag name: " + item.Name + "\r";
-                        resultString += "\tTag confidence: " + item.Confidence + "\n";
-
+                        resultString += "\tTag name: " + tags.Name + "\r";
+                        resultString += "\tTag confidence: " + tags.Confidence + "\n";
                     }
                     break;
 
@@ -65,7 +64,6 @@ namespace VisionApiDemo.Core.Helpers
                         resultString += "Clip art type: " + result.ImageType.ClipArtType + "\r";
                         resultString += "Line drawing type: " + result.ImageType.LineDrawingType + "\n";
                     break;
-
                 default:
                     resultString += "Image format: " + result.Metadata.Format + "\r";
                     resultString += "Image height: " + result.Metadata.Height + "\r";
@@ -75,10 +73,15 @@ namespace VisionApiDemo.Core.Helpers
             return resultString;
         }
 
-        public static string GetFaceInfo()
+        public static List<FacePosition> GetFaceInfo(Microsoft.ProjectOxford.Face.Contract.Face[] faces)
         {
-            new NotImplementedException();
-            return null;
+            List<FacePosition> facesDictionary = new List<FacePosition>();
+            foreach (var face in faces)
+            {
+                var rect = face.FaceRectangle;
+                facesDictionary.Add(new FacePosition(face.FaceRectangle.Height, face.FaceRectangle.Left, face.FaceRectangle.Top, face.FaceRectangle.Width));
+            }
+            return facesDictionary;
         }
 
         public static string GetEmotionInfo()

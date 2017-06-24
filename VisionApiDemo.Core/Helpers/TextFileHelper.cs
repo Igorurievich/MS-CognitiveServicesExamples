@@ -23,11 +23,11 @@ namespace VisionApiDemo.Core.Helpers
             VisionEndpoint = dataMassive[1];
             VisionKey = dataMassive[2];
 
-            FacesEndpoint = dataMassive[5];
-            FacesKey = dataMassive[6];
+            FacesEndpoint = dataMassive[4];
+            FacesKey = dataMassive[5];
 
-            EmotionsEndpoint = dataMassive[9];
-            EmotionsKey = dataMassive[10];
+            EmotionsEndpoint = dataMassive[7];
+            EmotionsKey = dataMassive[8];
         }
 
         private static string[] fillPropertiesFromTextFile(string path)

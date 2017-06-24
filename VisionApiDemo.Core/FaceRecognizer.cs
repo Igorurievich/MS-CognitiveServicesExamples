@@ -3,6 +3,7 @@ using System.IO;
 using System.Threading.Tasks;
 using Microsoft.ProjectOxford.Face;
 using VisionApiDemo.Core.Helpers;
+using System.Collections.Generic;
 
 namespace VisionApiDemo.Core
 {
@@ -24,20 +25,18 @@ namespace VisionApiDemo.Core
             _faceServiceClient = new FaceServiceClient(SubscriptionKey, ApiRoot);
         }
 
-        public async Task<string> AnalyzeUrlAsync(string imageUrl, Enums.VisualFeature visualFeature)
+        public async Task<List<FacePosition>> AnalyzeUrlAsync(string imageUrl)
         {
             var analysisResult = await _faceServiceClient.DetectAsync(imageUrl, false, true);
-            string formattedResultString = AnalisysHelper.GetFaceInfo();
-            return formattedResultString;
+            return AnalisysHelper.GetFaceInfo(analysisResult);
         }
 
-        public async Task<string> AnalyzeImageFromDisk(Stream imageStream, Enums.VisualFeature visualFeature)
+        public async Task<List<FacePosition>> AnalyzeImageFromDisk(Stream imageStream)
         {
             try
             {
                 var analysisResult = await _faceServiceClient.DetectAsync(imageStream, true, true);
-                string formattedResultString = AnalisysHelper.GetFaceInfo();
-                return formattedResultString;
+                return AnalisysHelper.GetFaceInfo(analysisResult);
             }
             catch (Exception e)
             {

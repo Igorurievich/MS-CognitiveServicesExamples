@@ -68,10 +68,12 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <Image x:Name="LeftImage"
+                   VerticalAlignment="Top"
                    Grid.Column="0"
                    Source="{Binding StreamImageSourceObj}"
                    Margin="5" />
             <Image x:Name="RightImage"
+                   VerticalAlignment="Top"
                    Grid.Column="1"
                    Margin="5"
                    Panel.ZIndex="1"
