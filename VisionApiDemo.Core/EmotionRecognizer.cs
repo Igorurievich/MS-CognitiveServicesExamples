@@ -15,7 +15,7 @@ namespace VisionApiDemo.Core
         public string SubscriptionKey { get; }
         public string ApiRoot { get; }
 
-        private readonly EmotionServiceClient _faceServiceClient;
+        private readonly EmotionServiceClient _emotionServiceClient;
 
         public EmotionRecognizer(string subscriptionKey, string apiRoot)
         {
@@ -25,12 +25,12 @@ namespace VisionApiDemo.Core
             }
             SubscriptionKey = subscriptionKey;
             ApiRoot = apiRoot;
-            _faceServiceClient = new EmotionServiceClient(SubscriptionKey, ApiRoot);
+            _emotionServiceClient = new EmotionServiceClient(SubscriptionKey, ApiRoot);
         }
 
         public async Task<string> AnalyzeUrlAsync(string imageUrl, Rectangle[] faceRectangles)
         {
-            var analysisResult = await _faceServiceClient.RecognizeAsync(imageUrl, faceRectangles);
+            var analysisResult = await _emotionServiceClient.RecognizeAsync(imageUrl, faceRectangles);
             string formattedResultString = AnalisysHelper.GetEmotionInfo();
             return formattedResultString;
         }
@@ -39,7 +39,7 @@ namespace VisionApiDemo.Core
         {
             try
             {
-                var analysisResult = await _faceServiceClient.RecognizeAsync(imageStream, faceRectangles);
+                var analysisResult = await _emotionServiceClient.RecognizeAsync(imageStream, faceRectangles);
                 string formattedResultString = AnalisysHelper.GetEmotionInfo();
                 return formattedResultString;
             }

@@ -32,7 +32,7 @@ namespace VisionApiDemo.Core
             return formattedResultString;
         }
 
-        public async Task<string> AnalyzeImageFromDisk(Stream imageStream, Enums.VisualFeature visualFeature)
+        public async Task<string> AnalyzeImageAsync(Stream imageStream, Enums.VisualFeature visualFeature)
         {
             try
             {

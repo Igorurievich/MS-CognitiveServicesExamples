@@ -180,19 +180,23 @@ namespace VisionApiStreamDemo
 
         private async void RecognizeFrameAsync()
         {
-            Image tempImage;
+            Image imageForRecognizing;
+            imageForRecognizing = _actualFrameImage;
             switch (SelectedRecognizeMode)
             {
                 case Globals.DescriptionMode:
-                    tempImage = _actualFrameImage;
-                    string resultString = await _visionRecognizer.AnalyzeImageFromDisk(tempImage.ToStream(ImageFormat.Jpeg), VisualFeature.Description);
+                    
+                    string resultString = await _visionRecognizer.AnalyzeImage(imageForRecognizing.ToStream(ImageFormat.Jpeg), VisualFeature.Description);
                     break;
                 case Globals.EmotionsMode:
-                    tempImage = _actualFrameImage;
+
+                    string resultString = await _emotionRecognizer.AnalyzeImageFromDisk(imageForRecognizing.ToStream(ImageFormat.Jpeg), VisualFeature.Description);
+
                     break;
                 case Globals.FacesMode:
-                    tempImage = _actualFrameImage;
-                    ActualFrameSourceObj = ConvertImageToBi(DrawRectangleOnFrame(tempImage, await _faceRecognizer.AnalyzeImageFromDisk(tempImage.ToStream(ImageFormat.Jpeg))));
+
+                    ActualFrameSourceObj = ConvertImageToBi(DrawRectangleOnFrame(imageForRecognizing, await _faceRecognizer.AnalyzeImageFromDisk(imageForRecognizing.ToStream(ImageFormat.Jpeg))));
+
                     break;
                 case Globals.FacesWithEmotionsMode:
 
