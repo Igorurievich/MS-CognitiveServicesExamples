@@ -139,16 +139,13 @@ namespace VisionApiStreamDemo
             try
             {
                 Image img = (Bitmap)eventArgs.Frame.Clone();
-                StreamImageSourceObj = ConvertImageToBi((Bitmap)eventArgs.Frame.Clone());
+                StreamImageSourceObj = ConvertImageToBitmapImage((Bitmap)eventArgs.Frame.Clone());
                 _actualFrameImage = img;
             }
-            catch (Exception ex)
-            {
-
-            }
+            catch (Exception) { }
         }
 
-        private static BitmapImage ConvertImageToBi(Image img)
+        private static BitmapImage ConvertImageToBitmapImage(Image img)
         {
             MemoryStream ms = new MemoryStream();
             img.Save(ms, ImageFormat.Bmp);
@@ -186,16 +183,16 @@ namespace VisionApiStreamDemo
             {
                 case Globals.DescriptionMode:
                     
-                    string resultString = await _visionRecognizer.AnalyzeImage(imageForRecognizing.ToStream(ImageFormat.Jpeg), VisualFeature.Description);
+                    //string resultString = await _visionRecognizer.AnalyzeImage(imageForRecognizing.ToStream(ImageFormat.Jpeg), VisualFeature.Description);
                     break;
                 case Globals.EmotionsMode:
 
-                    string resultString = await _emotionRecognizer.AnalyzeImageFromDisk(imageForRecognizing.ToStream(ImageFormat.Jpeg), VisualFeature.Description);
+                    //string resultString = await _emotionRecognizer.AnalyzeImageFromDisk(imageForRecognizing.ToStream(ImageFormat.Jpeg), VisualFeature.Description);
 
                     break;
                 case Globals.FacesMode:
 
-                    ActualFrameSourceObj = ConvertImageToBi(DrawRectangleOnFrame(imageForRecognizing, await _faceRecognizer.AnalyzeImageFromDisk(imageForRecognizing.ToStream(ImageFormat.Jpeg))));
+                    //ActualFrameSourceObj = ConvertImageToBi(DrawRectangleOnFrame(imageForRecognizing, await _faceRecognizer.AnalyzeImageFromDisk(imageForRecognizing.ToStream(ImageFormat.Jpeg))));
 
                     break;
                 case Globals.FacesWithEmotionsMode:

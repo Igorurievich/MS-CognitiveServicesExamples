@@ -14,7 +14,6 @@ namespace VisionApiDemo.Core
     {
         public string SubscriptionKey { get; }
         public string ApiRoot { get; }
-
         private readonly EmotionServiceClient _emotionServiceClient;
 
         public EmotionRecognizer(string subscriptionKey, string apiRoot)

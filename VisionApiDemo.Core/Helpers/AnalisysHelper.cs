@@ -83,11 +83,5 @@ namespace VisionApiDemo.Core.Helpers
             }
             return facesDictionary;
         }
-
-        public static string GetEmotionInfo()
-        {
-            new NotImplementedException();
-            return null;
-        }
     }
 }

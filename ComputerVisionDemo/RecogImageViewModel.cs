@@ -5,6 +5,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using VisionApiDemo.Core;
 using VisionApiDemo.Core.Enums;
+using VisionApiDemo.Core.Helpers;
 
 namespace ComputerVisionDemo
 {
